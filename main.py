@@ -1,5 +1,25 @@
+# Streamlit app for Groq Chatbot (Llama-3.3-70b-versatile) - Single file deployable version
+import os
 import streamlit as st
-from app import get_groq_response
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def get_groq_response(quries):
+    client = Groq(
+        api_key=os.environ.get("GROQ_API_KEY"),
+    )
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": quries ,
+            }
+        ],
+        model="llama-3.3-70b-versatile",
+    )
+    return chat_completion.choices[0].message.content
 
 st.title("Groq Chatbot (Llama-3.3-70b-versatile)")
 
